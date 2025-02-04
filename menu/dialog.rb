@@ -31,7 +31,7 @@ module Menu
         @choice = gets.to_i
         case @choice
         when 1
-          Menu.show('Вы выбрали Просмотр, но эта функция еще не была добавлена')
+          Menu.show
           break
         when 2
           Menu.create('Вы выбрали Создание, но эта функция еще не была добавлена')
