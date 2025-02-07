@@ -2,9 +2,13 @@ require_relative 'base_menu'
 
 module Menu
   class CreateMenu < BaseMenu
+    class << self
+    end
   end
 
-  def self.create(message)
-    CreateMenu.perform(message)
+  class << self
+    def create(message)
+      CreateMenu.perform(message)
+    end
   end
 end

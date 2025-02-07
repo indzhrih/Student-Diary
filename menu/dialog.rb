@@ -7,10 +7,6 @@ require_relative 'incorrect_value_menu'
 
 module Menu
   class Dialog < BaseMenu
-    def initialize
-      @choice = 0
-    end
-
     def start_dialog
       show_variants
       start_menu
@@ -42,7 +38,7 @@ module Menu
         when 4
           Menu.exit_application('Выходим...')
         else
-          Menu.warning('Пожалуйста введите корректное значение')
+          Menu.warning('Пожалуйста введите корректное значение', 1)
         end
       end
     end

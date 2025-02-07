@@ -2,30 +2,25 @@ require_relative 'lab'
 
 module ValueClasses
   class Discipline
-    attr_accessor :name
+    attr_accessor :name, :marks, :labs
+    attr_reader :id, :semester_id
 
-    def initialize(name = '', marks = [], labs = [])
+    def initialize(id, name, semester_id)
+      @id = id
       @name = name
-      @marks = marks
-      @labs = labs
+      @semester_id = semester_id
     end
 
-    def output
-      puts "Предмет: #{@name}\n"\
-           "- Оценки: #{@marks.join(', ')}\n"
-      if @labs.empty?
-        puts 'Лабараторные работы не добавлены'
-      else
-        @labs.each(&:output)
-      end
-      puts '--------------------------'
-    end
+    class << self
+      def get_disciplines_to_sem(sem_id)
+        result = DBConnect.read_query('SELECT id, name, semester_id FROM discipline WHERE semester_id = $1', [sem_id])
+        return [] if result.num_tuples.zero?
 
-    def show_labs
-      if @labs.empty?
-        puts 'Вы еще не добавили лабараторные в эту дисциплину'
-      else
-        @labs.each(&:output)
+        disciplines = []
+        result.each do |row|
+          disciplines.push(Discipline.new(row['id'].to_i, row['name'], row['semester_id']))
+        end
+        disciplines
       end
     end
   end
