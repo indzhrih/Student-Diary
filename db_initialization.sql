@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS Semester (
   name VARCHAR(50) NOT NULL,
   start_date DATE,
   end_date DATE,
-  status VARCHAR(50) CHECK (status IN ("Активен", "Не Активен")) 
+  active BOOL 
 );
 
 CREATE TABLE IF NOT EXISTS Discipline (
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS Lab (
   id SERIAL PRIMARY KEY, 
   name VARCHAR(50) NOT NULL,
   deadline DATE,
-  status VARCHAR(50) CHECK (status IN ("Выполнено", "Не Выполнено")), 
+  completed BOOL, 
   mark INT,
   discipline_id INT,
   FOREIGN KEY (discipline_id) REFERENCES Discipline(id)

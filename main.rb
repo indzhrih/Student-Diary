@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift(File.expand_path(__dir__))
 
-require 'db_connect'
+require_relative 'd_b_connect'
 require_relative 'menu/main_menu'
 
-DBConnect.initialize_database('db_initialization.sql', 'student_diary')
+DatabaseConnect.new.initialize_database
 Menu.start

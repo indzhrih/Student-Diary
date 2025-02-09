@@ -9,10 +9,4 @@ module Menu
       end
     end
   end
-
-  class << self
-    def exit_application(message)
-      ExitMenu.perform(message)
-    end
-  end
 end

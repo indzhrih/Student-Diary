@@ -7,16 +7,12 @@ module Menu
       def perform(message, choice)
         puts message
         case choice
-        when 1 then Dialog.new.start_dialog
-        when 2 then ShowMenu.perform
+        when 1
+          Dialog.new.start_dialog
+        when 2
+          ShowMenu.perform
         end
       end
-    end
-  end
-
-  class << self
-    def warning(message, choice)
-      IncorrectValueMenu.perform(message, choice)
     end
   end
 end
