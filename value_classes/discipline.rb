@@ -1,11 +1,11 @@
 require_relative 'lab'
-require 'query_objects/discipline_query'
+require_relative '../query_objects/discipline_query'
 
 module ValueClasses
   class Discipline
     attr_accessor :name, :marks, :labs
 
-    def initialize(id = 1, name = '', semester_id = 1)
+    def initialize(id:, name:, semester_id:)
       @id = id
       @name = name
       @semester_id = semester_id
@@ -16,7 +16,7 @@ module ValueClasses
         id: @id,
         name: @name,
         semester_id: @semester_id,
-        labs: QueryObjects::DisciplineQuery.get_labs_to_disciplines(@id)
+        labs: QueryObjects::DisciplineQuery.get_labs_to_disciplines(discipline_id: @id)
       }
     end
   end

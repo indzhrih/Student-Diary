@@ -30,15 +30,15 @@ module Menu
           Menu.show
           break
         when 2
-          Menu.create('Вы выбрали Создание, но эта функция еще не была добавлена')
+          Menu.create(message: 'Вы выбрали Создание, но эта функция еще не была добавлена')
           break
         when 3
-          Menu.delete('Вы выбрали Удаление, но эта функция еще не была добавлена')
+          Menu.delete(message: 'Вы выбрали Удаление, но эта функция еще не была добавлена')
           break
         when 4
-          Menu.exit_application('Выходим...')
+          Menu.exit_application(message: 'Выходим...')
         else
-          Menu.warning('Пожалуйста введите корректное значение', 1)
+          Menu.warning(message: 'Пожалуйста введите корректное значение', choice: 1)
         end
       end
     end

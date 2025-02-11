@@ -4,7 +4,7 @@ require_relative 'show_menu'
 module Menu
   class IncorrectValueMenu < BaseMenu
     class << self
-      def perform(message, choice)
+      def perform(message:, choice:)
         puts message
         case choice
         when 1

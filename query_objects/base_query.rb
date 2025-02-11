@@ -1,10 +1,10 @@
-require 'd_b_connect'
+require_relative '../d_b_connect'
 require 'pg'
 
 module QueryObjects
-  class QueryObject
+  class BaseQuery
     class << self
-      def perform_read_query(query, params = [])
+      def perform_read_query(query:, params: [])
         connection = DatabaseConnect.new.connection
         result = connection.exec_params(query, params)
         result

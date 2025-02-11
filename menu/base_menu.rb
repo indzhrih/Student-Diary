@@ -7,7 +7,7 @@ module Menu
     end
 
     class << self
-      def perform(message)
+      def perform(message:)
         puts message
         Dialog.new.start_dialog
       end

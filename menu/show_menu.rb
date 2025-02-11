@@ -1,6 +1,6 @@
 require_relative 'base_menu'
-require 'query_objects/semester_query'
-require 'value_classes/semester'
+require_relative '../query_objects/semester_query'
+require_relative '../value_classes/semester'
 
 module Menu
   class ShowMenu < BaseMenu
@@ -20,17 +20,17 @@ module Menu
 
       def choice_menu
         @choice = gets.chomp
-        chosen_sem = QueryObjects::SemesterQuery.find_sem(@choice)
+        chosen_sem = QueryObjects::SemesterQuery.find_sem(sem: @choice)
 
-        return show_sem(chosen_sem) if chosen_sem.nil? == false
+        return show_sem(sem: chosen_sem) if chosen_sem.nil? == false
         return Menu.start if @choice.chomp == '0'
 
-        Menu.warning("Указанный семестр не найден!\nПожалуйста введите корректное значение", 2)
+        Menu.warning(message: "Указанный семестр не найден!\nПожалуйста введите корректное значение", choice: 2)
       end
 
-      def show_sem(sem)
+      def show_sem(sem:)
         info = sem.get_json_info
-        disciplines_info = show_sem_disciplines(sem, info)
+        disciplines_info = show_sem_disciplines(sem: sem, info: info)
 
         puts "Семестр: #{info[:name]}\n"\
              "- Дата начала: #{info[:start_date]}\n"\
@@ -42,35 +42,35 @@ module Menu
         perform
       end
 
-      def show_discipline(discipline)
+      def show_discipline(discipline:)
         info = discipline.get_json_info
-        labs_info = show_discipline_labs(discipline, info)
+        labs_info = show_discipline_labs(discipline: discipline, info: info)
 
         "Предмет: #{info[:name]}\n"\
         "#{labs_info}\n"\
         '--------------------------'
       end
 
-      def show_lab(lab)
+      def show_lab(lab:)
         info = lab.get_json_info
-        status_info = show_status_info(lab, info)
+        status_info = show_status_info(lab: lab, info: info)
 
         "[#{info[:completed]}] #{info[:name]}\n#{status_info}"
       end
 
-      def show_sem_disciplines(_sem, info)
+      def show_sem_disciplines(sem:, info:)
         return 'Дисциплины не добавлены' if info[:disciplines].empty?
 
-        info[:disciplines].map { |discipline| show_discipline(discipline) }.join("\n")
+        info[:disciplines].map { |discipline| show_discipline(discipline: discipline) }.join("\n")
       end
 
-      def show_discipline_labs(_discipline, info)
+      def show_discipline_labs(discipline:, info:)
         return "Лабараторные работы не добавлены\n" if info[:labs].empty?
 
-        info[:labs].map { |lab| show_lab(lab) }.join("\n")
+        info[:labs].map { |lab| show_lab(lab: lab) }.join("\n")
       end
 
-      def show_status_info(_lab, info)
+      def show_status_info(lab:, info:)
         return "Оценка: #{info[:mark]}" if info[:completed] == 'Выполнено'
 
         "Дедлайн: #{info[:deadline]}"
