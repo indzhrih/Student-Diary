@@ -10,12 +10,10 @@ module QueryObjects
         )
         return [] if result.num_tuples.zero?
 
-        labs = []
-        result.each do |row|
-          labs.push(ValueClasses::Lab.new(id: row['id'].to_i, name: row['name'], deadline: row['deadline'], completed: row['completed'], mark: row['mark'],
-                                          discipline_id: row['discipline_id']))
+        result.map do |row|
+          ValueClasses::Lab.new(id: row['id'].to_i, name: row['name'], deadline: row['deadline'], completed: row['completed'], mark: row['mark'],
+                                discipline_id: row['discipline_id'])
         end
-        labs
       end
     end
   end

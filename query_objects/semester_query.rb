@@ -24,12 +24,10 @@ module QueryObjects
         )
         return [] if result.num_tuples.zero?
 
-        disciplines = []
         result.each do |row|
-          disciplines.push(ValueClasses::Discipline.new(id: row['id'].to_i, name: row['name'],
-                                                        semester_id: row['semester_id']))
+          ValueClasses::Discipline.new(id: row['id'].to_i, name: row['name'],
+                                       semester_id: row['semester_id'])
         end
-        disciplines
       end
     end
   end
