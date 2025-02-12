@@ -7,10 +7,6 @@ require_relative 'incorrect_value_menu'
 
 module Menu
   class Dialog < BaseMenu
-    def initialize
-      @choice = 0
-    end
-
     def start_dialog
       show_variants
       start_menu
@@ -31,18 +27,18 @@ module Menu
         @choice = gets.to_i
         case @choice
         when 1
-          Menu.show('Вы выбрали Просмотр, но эта функция еще не была добавлена')
+          Menu.show
           break
         when 2
-          Menu.create('Вы выбрали Создание, но эта функция еще не была добавлена')
+          Menu.create(message: 'Вы выбрали Создание, но эта функция еще не была добавлена')
           break
         when 3
-          Menu.delete('Вы выбрали Удаление, но эта функция еще не была добавлена')
+          Menu.delete(message: 'Вы выбрали Удаление, но эта функция еще не была добавлена')
           break
         when 4
-          Menu.exit_application('Выходим...')
+          Menu.exit_application(message: 'Выходим...')
         else
-          Menu.warning('Пожалуйста введите корректное значение')
+          Menu.warning(message: 'Пожалуйста введите корректное значение', choice: 1)
         end
       end
     end
