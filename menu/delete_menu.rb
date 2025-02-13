@@ -2,12 +2,10 @@ require_relative 'base_menu'
 
 module Menu
   class DeleteMenu < BaseMenu
-    def self.perform(message)
-      super(message)
+    class << self
+      def perform(message:)
+        super(message: message)
+      end
     end
-  end
-
-  def self.delete(message)
-    DeleteMenu.perform(message)
   end
 end
