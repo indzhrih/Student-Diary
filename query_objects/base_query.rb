@@ -4,7 +4,7 @@ require 'pg'
 module QueryObjects
   class BaseQuery
     class << self
-      def perform_read_query(query:, params: [])
+      def perform_query(query:, params: [])
         connection = DatabaseConnect.new.connection
         result = connection.exec_params(query, params)
         result
