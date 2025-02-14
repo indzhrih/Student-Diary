@@ -10,8 +10,8 @@ module Menu
       ShowMenu.perform
     end
 
-    def create(message:)
-      CreateMenu.perform(message: message)
+    def create
+      CreateMenu.perform
     end
 
     def delete(message:)
