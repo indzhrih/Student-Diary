@@ -1,28 +1,38 @@
 require 'date'
-require_relative '../query_objects/semester_query'
+require_relative '../queries/semester_query'
+require_relative '../value_classes/semester'
 require_relative '../menu/create_menu'
 
-module FormObjects
+module Forms
   class SemesterForm
     class << self
       def create_semester
-        QueryObjects::SemesterQuery.add_to_d_b(info: get_info)
-        Menu::CreateMenu.perform
+        Queries::SemesterQuery.add_to_d_b(info: get_info)
       end
 
       private
 
       def get_info
-        info = {}
         puts 'Введите название Семестра'
-        info[:name] = gets.chomp
+        name = validate_name
         puts 'Введите дату начала формата ДД-ММ-ГГГГ'
-        info[:start_date] = validate_date
+        start_date = validate_date
         puts 'Введите дату окончания формата ДД-ММ-ГГГГ'
-        info[:end_date] = validate_date
+        end_date = validate_date
         puts 'Введите статус(Активен или Не активен)'
-        info[:active] = validate_status
-        info
+        active = validate_status
+
+        ValueClasses::Semester.new(name: name, start_date: start_date, end_date: end_date, active: active)
+      end
+
+      def validate_name
+        name = gets.chomp
+        while Queries::SemesterQuery.is_name_unique(name: name) == false
+          puts 'Такое имя уже есть!'
+          name = gets.chomp
+        end
+
+        name
       end
 
       def validate_date
@@ -30,6 +40,7 @@ module FormObjects
           date = gets.chomp
           day, month, year = date.split('-').map(&:to_i)
           Date.new(year, month, day)
+
           return date
         rescue StandardError
           puts 'Неверный формат даты или некорректные значения дня/месяца/года!'
@@ -38,14 +49,12 @@ module FormObjects
 
       def validate_status
         status = gets.chomp
-        until ['активен', 'не активен'].include?(status.downcase)
+        while ['активен', 'не активен'].include?(status.downcase) == false
           puts 'Неверный формат статуса, он должен быть Активен или Не активен'
           status = gets.chomp
         end
 
-        return true if status.downcase == 'активен'
-
-        false if status.downcase == 'не активен'
+        status.downcase == 'активен'
       end
     end
   end

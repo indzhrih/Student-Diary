@@ -1,12 +1,13 @@
 require_relative 'base_query'
 require_relative '../value_classes/discipline'
 
-module QueryObjects
+module Queries
   class DisciplineQuery < BaseQuery
     class << self
-      def find_discipline_by_sem_id(discipline:, sem_id:)
+      def find_discipline_by_name_and_sem_id(discipline:, sem_id:)
         result = perform_query(query: 'SELECT * FROM discipline WHERE name = $1 AND semester_id = $2',
                                params: [discipline, sem_id])
+
         return nil if result.num_tuples.zero?
 
         row = result.first
@@ -28,6 +29,14 @@ module QueryObjects
       def show_added_disciplines_by_id(sem_id:)
         result = perform_query(query: 'SELECT name FROM discipline WHERE semester_id = $1', params: [sem_id])
         result.map { |row| puts(row['name']) }
+      end
+
+      def is_name_unique(name:)
+        result = perform_query(query: 'SELECT name FROM discipline WHERE name = $1', params: [name])
+
+        return true if result.num_tuples.zero?
+
+        false
       end
 
       def add_to_d_b(sem_id:, name:)

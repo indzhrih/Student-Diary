@@ -1,28 +1,29 @@
 require 'date'
-require_relative '../query_objects/lab_query'
+require_relative '../queries/lab_query'
+require_relative '../value_classes/discipline'
 require_relative '../menu/create_menu'
 
-module FormObjects
+module Forms
   class LabForm
     class << self
       def create_lab(discipline_id:)
-        QueryObjects::LabQuery.add_to_d_b(discipline_id: discipline_id, info: get_info)
-        Menu::CreateMenu.perform
+        Queries::LabQuery.add_to_d_b(info: get_info(discipline_id: discipline_id))
       end
 
       private
 
-      def get_info
-        info = {}
+      def get_info(discipline_id:)
         puts 'Введите название Лабараторной'
-        info[:name] = gets.chomp
+        name = gets.chomp
         puts 'Введите дедлайн формата ДД-ММ-ГГГГ'
-        info[:deadline] = validate_deadline
+        deadline = validate_deadline
         puts 'Введите статус(Выполнено или Не выполнено)'
-        info[:status] = validate_status
+        status = validate_status
         puts 'Введите оценку'
-        info[:mark] = validate_mark
-        info
+        mark = validate_mark
+
+        ValueClasses::Lab.new(name: name, deadline: deadline, completed: status, mark: mark,
+                              discipline_id: discipline_id)
       end
 
       def validate_deadline
@@ -30,6 +31,7 @@ module FormObjects
           date = gets.chomp
           day, month, year = date.split('-').map(&:to_i)
           Date.new(year, month, day)
+
           return date
         rescue StandardError
           puts 'Неверный формат даты или некорректные значения дня/месяца/года!'
@@ -38,19 +40,17 @@ module FormObjects
 
       def validate_status
         status = gets.chomp
-        until ['выполнено', 'не выполнено'].include?(status.downcase)
+        while ['выполнено', 'не выполнено'].include?(status.downcase) == false
           puts 'Неверный формат статуса, он должен быть Выполнено или Не выполнено'
           status = gets.chomp
         end
 
-        return true if status.downcase == 'выполнено'
-
-        false if status.downcase == 'не выполнено'
+        status.downcase == 'выполнено'
       end
 
       def validate_mark
         mark = gets.chomp
-        until mark.to_i > 0 && mark.to_i <= 10
+        while mark.to_i <= 0 && mark.to_i >= 10
           puts 'Неверный формат оценки, оценка должна быть от 0 до 10'
           mark = gets.chomp
         end

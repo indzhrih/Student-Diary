@@ -1,11 +1,12 @@
 require_relative 'base_query'
 require_relative '../value_classes/semester'
 
-module QueryObjects
+module Queries
   class SemesterQuery < BaseQuery
     class << self
       def find_sem_by_name(sem_name:)
         result = perform_query(query: 'SELECT * FROM semester WHERE name = $1', params: [sem_name])
+
         return nil if result.num_tuples.zero?
 
         row = result.first
@@ -15,6 +16,7 @@ module QueryObjects
 
       def find_sem_by_id(sem_id:)
         result = perform_query(query: 'SELECT * FROM semester WHERE id = $1', params: [sem_id])
+
         return nil if result.num_tuples.zero?
 
         row = result.first
@@ -31,6 +33,7 @@ module QueryObjects
         result = perform_query(
           query: 'SELECT * FROM discipline WHERE semester_id = $1', params: [sem_id]
         )
+
         return [] if result.num_tuples.zero?
 
         result.map do |row|
@@ -39,9 +42,22 @@ module QueryObjects
         end
       end
 
+      def is_name_unique(name:)
+        result = perform_query(query: 'SELECT name FROM semester WHERE name = $1', params: [name])
+
+        return true if result.num_tuples.zero?
+
+        false
+      end
+
       def add_to_d_b(info:)
+        name = info.name
+        start_date = info.start_date
+        end_date = info.end_date
+        active = info.active
+
         perform_query(query: 'INSERT INTO semester (name, start_date, end_date, active) VALUES ($1, $2, $3, $4)',
-                      params: [info[:name], info[:start_date], info[:end_date], info[:active]])
+                      params: [name, start_date, end_date, active])
       end
     end
   end
