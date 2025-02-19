@@ -30,7 +30,7 @@ module Menu
           Menu.show
           break
         when 2
-          Menu.create(message: 'Вы выбрали Создание, но эта функция еще не была добавлена')
+          Menu.create
           break
         when 3
           Menu.delete(message: 'Вы выбрали Удаление, но эта функция еще не была добавлена')

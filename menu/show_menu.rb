@@ -1,5 +1,5 @@
 require_relative 'base_menu'
-require_relative '../query_objects/semester_query'
+require_relative '../queries/semester_query'
 require_relative '../value_classes/semester'
 
 module Menu
@@ -15,12 +15,12 @@ module Menu
       def variants
         puts "Введите название семестра, который хотите отобразить или 0 если хотите вернуться назад \n"\
              "Добавленные семестры:\n"
-        QueryObjects::SemesterQuery.show_added_sems
+        Queries::SemesterQuery.show_added_sems
       end
 
       def choice_menu
         @choice = gets.chomp
-        chosen_sem = QueryObjects::SemesterQuery.find_sem(sem: @choice)
+        chosen_sem = Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: @choice)
 
         return show_sem(sem: chosen_sem) if chosen_sem.nil? == false
         return Menu.start if @choice.chomp == '0'

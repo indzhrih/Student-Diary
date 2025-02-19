@@ -11,6 +11,8 @@ module Menu
           Dialog.new.start_dialog
         when 2
           ShowMenu.perform
+        when 3
+          CreateMenu.perform
         end
       end
     end
