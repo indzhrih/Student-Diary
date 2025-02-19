@@ -30,7 +30,7 @@ module Menu
       def show_discipline_variants(sem_id:)
         puts "Введите название дисциплины, в который хотите добавить новую лабу или 0 если хотите вернуться назад\n"\
              "Добавленные дисциплины:\n"
-        Queries::DisciplineQuery.show_added_disciplines_by_id(sem_id: sem_id)
+        Queries::SemesterQuery.show_disciplines_for_sem(sem_id: sem_id)
       end
 
       def create_semester
@@ -76,7 +76,7 @@ module Menu
 
       def choice_sem_menu(creation_choice:)
         @choice = gets.chomp
-        chosen_sem = Queries::SemesterQuery.find_sem_by_name(sem_name: @choice)
+        chosen_sem = Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: @choice)
 
         if chosen_sem.nil? == false && creation_choice == 1
           return Forms::DisciplineForm.create_discipline(sem_id: chosen_sem.get_json_info[:id])

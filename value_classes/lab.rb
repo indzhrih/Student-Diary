@@ -2,7 +2,7 @@ module ValueClasses
   class Lab
     attr_accessor :name, :deadline, :completed, :mark
 
-    def initialize(name:, deadline:, mark:, discipline_id:, id: 1, completed: false)
+    def initialize(name:, deadline:, mark:, discipline_id:, id:, completed: false)
       @id = id
       @name = name
       @deadline = deadline

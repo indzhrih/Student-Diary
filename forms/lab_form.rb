@@ -7,7 +7,7 @@ module Forms
   class LabForm
     class << self
       def create_lab(discipline_id:)
-        Queries::LabQuery.add_to_d_b(info: get_info(discipline_id: discipline_id))
+        Queries::LabQuery.add_to_d_b(lab: get_info(discipline_id: discipline_id))
       end
 
       private
@@ -22,8 +22,7 @@ module Forms
         puts 'Введите оценку'
         mark = validate_mark
 
-        ValueClasses::Lab.new(name: name, deadline: deadline, completed: status, mark: mark,
-                              discipline_id: discipline_id)
+        [name, deadline, status, mark, discipline_id]
       end
 
       def validate_deadline

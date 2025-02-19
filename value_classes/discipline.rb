@@ -5,7 +5,7 @@ module ValueClasses
   class Discipline
     attr_accessor :name, :marks, :labs
 
-    def initialize(name:, semester_id:, id: 1)
+    def initialize(name:, semester_id:, id:)
       @id = id
       @name = name
       @semester_id = semester_id

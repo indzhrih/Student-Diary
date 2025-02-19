@@ -7,7 +7,7 @@ module Queries
       def perform_query(query:, params: [])
         connection = DatabaseConnect.new.connection
         result = connection.exec_params(query, params)
-        
+
         result
       rescue PG::Error => e
         puts "Ошибка запроса на чтение: #{e.message}"

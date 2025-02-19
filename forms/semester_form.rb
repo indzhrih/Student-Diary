@@ -7,7 +7,7 @@ module Forms
   class SemesterForm
     class << self
       def create_semester
-        Queries::SemesterQuery.add_to_d_b(info: get_info)
+        Queries::SemesterQuery.add_to_d_b(sem: get_info)
       end
 
       private
@@ -22,7 +22,7 @@ module Forms
         puts 'Введите статус(Активен или Не активен)'
         active = validate_status
 
-        ValueClasses::Semester.new(name: name, start_date: start_date, end_date: end_date, active: active)
+        [name, start_date, end_date, active]
       end
 
       def validate_name

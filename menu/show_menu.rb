@@ -20,7 +20,7 @@ module Menu
 
       def choice_menu
         @choice = gets.chomp
-        chosen_sem = Queries::SemesterQuery.find_sem_by_name(sem_name: @choice)
+        chosen_sem = Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: @choice)
 
         return show_sem(sem: chosen_sem) if chosen_sem.nil? == false
         return Menu.start if @choice.chomp == '0'

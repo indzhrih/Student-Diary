@@ -26,19 +26,6 @@ module Queries
         end
       end
 
-      def show_added_disciplines_by_id(sem_id:)
-        result = perform_query(query: 'SELECT name FROM discipline WHERE semester_id = $1', params: [sem_id])
-        result.map { |row| puts(row['name']) }
-      end
-
-      def is_name_unique(name:)
-        result = perform_query(query: 'SELECT name FROM discipline WHERE name = $1', params: [name])
-
-        return true if result.num_tuples.zero?
-
-        false
-      end
-
       def add_to_d_b(sem_id:, name:)
         perform_query(query: 'INSERT INTO discipline (name, semester_id) VALUES ($1, $2)',
                       params: [name, sem_id])

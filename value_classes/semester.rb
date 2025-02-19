@@ -6,7 +6,7 @@ module ValueClasses
   class Semester
     attr_accessor :name, :start_date, :end_date, :active
 
-    def initialize(name:, start_date:, end_date:, id: 1, active: false)
+    def initialize(name:, start_date:, end_date:, id:, active: false)
       @id = id
       @name = name
       @start_date = start_date
