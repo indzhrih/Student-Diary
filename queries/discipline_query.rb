@@ -14,6 +14,11 @@ module Queries
         ValueClasses::Discipline.new(id: row['id'].to_i, name: row['name'], semester_id: row['semester_id'])
       end
 
+      def show_labs_for_discipline(discipline_id:)
+        result = perform_query(query: 'SELECT name FROM lab WHERE discipline_id = $1', params: [discipline_id])
+        result.map { |row| puts(row['name']) }
+      end
+
       def get_labs_to_disciplines(discipline_id:)
         result = perform_query(
           query: 'SELECT * FROM lab WHERE discipline_id = $1', params: [discipline_id]
@@ -29,6 +34,13 @@ module Queries
       def add_to_d_b(sem_id:, name:)
         perform_query(query: 'INSERT INTO discipline (name, semester_id) VALUES ($1, $2)',
                       params: [name, sem_id])
+      end
+
+      def delete_discipline_from_d_b(discipline_id:)
+        perform_query(query: "DELETE FROM lab WHERE discipline_id IN ($1)", params: [discipline_id]) if discipline_id.nil? == false
+        perform_query(query: "DELETE FROM discipline WHERE id = $1", params: [discipline_id])
+
+        puts "Дисциплина и все связанные с ней лабораторные работы успешно удалены."
       end
     end
   end

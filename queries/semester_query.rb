@@ -50,6 +50,19 @@ module Queries
         perform_query(query: 'INSERT INTO semester (name, start_date, end_date, active) VALUES ($1, $2, $3, $4)',
                       params: sem)
       end
+
+      def delete_sem_from_d_b(sem_name:)
+        semester_result = perform_query(query: "SELECT * FROM semester WHERE name = $1", params: [sem_name])
+        sem_id = semester_result.first['id'].to_i
+        disciplines_result = perform_query(query: "SELECT id FROM discipline WHERE semester_id = $1", params: [sem_id])
+        discipline_ids = disciplines_result.map { |row| row['id'] }
+
+        perform_query(query: "DELETE FROM lab WHERE discipline_id IN ($1)", params: [discipline_ids.join(',')]) if discipline_ids.any?
+        perform_query(query: "DELETE FROM discipline WHERE semester_id = $1", params: [sem_id]) if discipline_ids.any?
+        perform_query(query: "DELETE FROM semester WHERE id = $1", params: [sem_id])
+
+        puts "Семестр, все связанные дисциплины и лабораторные работы успешно удалены."
+      end
     end
   end
 end
