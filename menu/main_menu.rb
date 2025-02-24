@@ -14,8 +14,8 @@ module Menu
       CreateMenu.perform
     end
 
-    def delete(message:)
-      DeleteMenu.perform(message: message)
+    def delete
+      DeleteMenu.perform
     end
 
     def exit_application(message:)
