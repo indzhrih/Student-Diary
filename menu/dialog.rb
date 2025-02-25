@@ -33,7 +33,7 @@ module Menu
           Menu.create
           break
         when 3
-          Menu.delete(message: 'Вы выбрали Удаление, но эта функция еще не была добавлена')
+          Menu.delete
           break
         when 4
           Menu.exit_application(message: 'Выходим...')
