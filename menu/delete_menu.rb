@@ -2,9 +2,7 @@ require_relative 'base_menu'
 require_relative '../queries/semester_query'
 require_relative '../queries/discipline_query'
 require_relative '../queries/lab_query'
-require_relative '../commands/delete_semester'
-require_relative '../commands/delete_discipline'
-require_relative '../commands/delete_lab'
+require_relative '../commands/delete_object'
 
 module Menu
   class DeleteMenu < BaseMenu
@@ -16,69 +14,18 @@ module Menu
 
       private
 
-      def show_objects_variants
-        puts "Выберите что вы хотите удалить:\n"\
-             "1.Семестр\n"\
-             "2.Дисциплина\n"\
-             "3.Лабараторная\n"\
-             '4.Назад'
-      end
-
-      def show_sem_variants
-        puts "Введите название семестра, или 0 если хотите вернуться назад\n"\
-             "Добавленные семестры:\n"
-        Queries::SemesterQuery.show_added_sems
-      end
-
-      def show_discipline_variants(sem_id:)
-        puts "Введите название дисциплины или 0 если хотите вернуться назад\n"\
-             "Добавленные дисциплины:\n"
-        Queries::SemesterQuery.show_disciplines_for_sem(sem_id: sem_id)
-      end
-
-      def show_lab_variants(discipline_id:)
-        puts "Введите название лабы или 0 если хотите вернуться назад\n"\
-             "Добавленные дисциплины:\n"
-        Queries::DisciplineQuery.show_labs_for_discipline(discipline_id: discipline_id)
-      end
-
-      def delete_semester
-        show_sem_variants
-        sem_name = gets.chomp
-        Commands::DeleteSemester.delete_semester(sem_name: sem_name)
-        perform
-      end
-
-      def delete_discipline
-        show_sem_variants
-        sem_id = choice_sem_menu
-        show_discipline_variants(sem_id: sem_id)
-        choice_discipline_menu(sem_id: sem_id, deletion_choice: 1)
-        perform
-      end
-
-      def delete_lab
-        show_sem_variants
-        sem_id = choice_sem_menu
-        show_discipline_variants(sem_id: sem_id)
-        discipline_id = choice_discipline_menu(sem_id: sem_id, deletion_choice: 2)
-        show_lab_variants(discipline_id: discipline_id)
-        choice_lab_menu(discipline_id: discipline_id)
-        perform
-      end
-
       def choice_menu
         loop do
           @choice = gets.to_i
           case @choice
           when 1
-            delete_semester
+            delete_object(object_type: :semester)
             break
           when 2
-            delete_discipline
+            delete_object(object_type: :discipline)
             break
           when 3
-            delete_lab
+            delete_object(object_type: :lab)
             break
           when 4
             puts 'Назад...'
@@ -89,41 +36,75 @@ module Menu
         end
       end
 
-      def choice_sem_menu
-        @choice = gets.chomp
-        chosen_sem = Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: @choice)
-
-        return chosen_sem.get_json_info[:id] if chosen_sem.nil? == false
-        return Menu.start if @choice.chomp == '0'
-
-        Menu.warning(message: "Указанный семестр не найден!\nПожалуйста введите корректное значение", choice: 4)
+      def show_objects_variants
+        puts "Выберите что вы хотите удалить:\n"\
+             "1.Семестр\n"\
+             "2.Дисциплина\n"\
+             "3.Лабараторная\n"\
+             '4.Назад'
       end
 
-      def choice_discipline_menu(sem_id:, deletion_choice:)
-        @choice = gets.chomp
-        chosen_discipline = Queries::DisciplineQuery.find_discipline_by_name_and_sem_id(discipline: @choice,
-                                                                                        sem_id: sem_id)
-
-        if chosen_discipline.nil? == false && deletion_choice == 1
-          return Commands::DeleteDiscipline.delete_discipline(discipline_id: chosen_discipline.get_json_info[:id].to_i)
-        end
-        return chosen_discipline.get_json_info[:id].to_i if chosen_discipline.nil? == false && deletion_choice == 2
-        return Menu.start if @choice.chomp == '0'
-
-        Menu.warning(message: "Указанная дисциплина не найдена!\nПожалуйста введите корректное значение", choice: 4)
+      def get_variants_string(table_name:)
+        "Введите название из таблицы #{table_name}, или 0 если хотите вернуться назад\n"\
+               "Добавленные объекты из #{table_name}:\n"
       end
 
-      def choice_lab_menu(discipline_id:)
-        @choice = gets.chomp
-        chosen_lab = Queries::LabQuery.find_lab_by_name_and_discipline_id(lab: @choice,
-                                                                          discipline_id: discipline_id)
+      def show_sem_variants
+        puts get_variants_string(table_name: 'Семестр')
 
-        if chosen_lab.nil? == false
-          return Commands::DeleteLab.delete_lab(lab_id: chosen_lab.get_json_info[:id].to_i)
-        end
+        Queries::SemesterQuery.show_added_sems
+      end
+
+      def show_discipline_variants(id:)
+        puts get_variants_string(table_name: 'Дисциплина')
+
+        Queries::SemesterQuery.show_disciplines_for_sem(sem_id: id)
+      end
+
+      def show_lab_variants(id:)
+        puts get_variants_string(table_name: 'Лабараторная')
+
+        Queries::DisciplineQuery.show_labs_for_discipline(discipline_id: id)
+      end
+
+      def delete_object(object_type:)
+        Commands::DeleteCommand.perform(object: choice_object(object_type: object_type), object_type: object_type)
+        perform
+      end
+
+      def get_name
+        @choice = gets.chomp
+
         return Menu.start if @choice.chomp == '0'
 
-        Menu.warning(message: "Указанная дисциплина не найдена!\nПожалуйста введите корректное значение", choice: 4)
+        @choice
+      end
+
+      def choice_object(object_type:)
+        return semester_choice if object_type == :semester
+        return discipline_choice if object_type == :discipline
+
+        lab_choice if object_type == :lab
+      end
+
+      def semester_choice
+        show_sem_variants
+
+        Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: get_name)
+      end
+
+      def discipline_choice
+        sem_id = choice_object(object_type: :semester).get_json_info[:id]
+        show_discipline_variants(id: sem_id)
+
+        Queries::DisciplineQuery.find_discipline_by_name_and_sem_id(discipline: get_name, sem_id: sem_id)
+      end
+
+      def lab_choice
+        discipline_id = choice_object(object_type: :discipline).get_json_info[:id]
+        show_lab_variants(id: discipline_id)
+
+        Queries::LabQuery.find_lab_by_name_and_discipline_id(lab: get_name, discipline_id: discipline_id)
       end
     end
   end

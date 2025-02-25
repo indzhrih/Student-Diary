@@ -35,13 +35,6 @@ module Queries
         perform_query(query: 'INSERT INTO discipline (name, semester_id) VALUES ($1, $2)',
                       params: [name, sem_id])
       end
-
-      def delete_discipline_from_d_b(discipline_id:)
-        perform_query(query: "DELETE FROM lab WHERE discipline_id IN ($1)", params: [discipline_id]) if discipline_id.nil? == false
-        perform_query(query: "DELETE FROM discipline WHERE id = $1", params: [discipline_id])
-
-        puts "Дисциплина и все связанные с ней лабораторные работы успешно удалены."
-      end
     end
   end
 end

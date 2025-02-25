@@ -11,18 +11,13 @@ module Queries
         return nil if result.num_tuples.zero?
 
         row = result.first
-        ValueClasses::Lab.new(id: row['id'].to_i, name: row['name'], deadline: row['deadline'], completed: row['completed'], mark: ['mark'], discipline_id: row['discipline_id'])
+        ValueClasses::Lab.new(id: row['id'].to_i, name: row['name'], deadline: row['deadline'],
+                              completed: row['completed'], mark: ['mark'], discipline_id: row['discipline_id'])
       end
 
       def add_to_d_b(lab:)
         perform_query(query: 'INSERT INTO lab (name, deadline, completed, mark, discipline_id) VALUES ($1, $2, $3, $4, $5)',
                       params: lab)
-      end
-
-      def delete_lab_from_d_b(lab_id:)
-        perform_query(query: "DELETE FROM lab WHERE id = $1", params: [lab_id])
-        
-        puts "Лабораторные работы успешно удалены."
       end
     end
   end
