@@ -7,7 +7,6 @@ module Queries
       def find_lab_by_name_and_discipline_id(lab:, discipline_id:)
         result = perform_query(query: 'SELECT * FROM lab WHERE name = $1 AND discipline_id = $2',
                                params: [lab, discipline_id])
-
         return nil if result.num_tuples.zero?
 
         row = result.first

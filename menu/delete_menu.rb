@@ -74,17 +74,20 @@ module Menu
 
       def get_name
         @choice = gets.chomp
-
         return Menu.start if @choice.chomp == '0'
 
         @choice
       end
 
       def choice_object(object_type:)
-        return semester_choice if object_type == :semester
-        return discipline_choice if object_type == :discipline
-
-        lab_choice if object_type == :lab
+        case object_type
+        when :semester
+          semester_choice
+        when :discipline
+          discipline_choice
+        when :lab
+          lab_choice
+        end
       end
 
       def semester_choice
