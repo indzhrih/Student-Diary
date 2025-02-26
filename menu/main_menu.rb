@@ -1,4 +1,5 @@
 require_relative 'dialog'
+require_relative 'csv_export_menu'
 
 module Menu
   class << self
@@ -16,6 +17,10 @@ module Menu
 
     def delete(message:)
       DeleteMenu.perform(message: message)
+    end
+
+    def csv_export
+      CSVExportMenu.perform
     end
 
     def exit_application(message:)
