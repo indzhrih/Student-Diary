@@ -13,6 +13,8 @@ module Menu
           ShowMenu.perform
         when 3
           CreateMenu.perform
+        when 5
+          CSVExportMenu.perform
         end
       end
     end
