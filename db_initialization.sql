@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Discipline (
   id SERIAL PRIMARY KEY, 
   name VARCHAR(50) NOT NULL,
   semester_id INT,
-  FOREIGN KEY (semester_id) REFERENCES Semester(id)
+  FOREIGN KEY (semester_id) REFERENCES Semester(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Lab (
@@ -20,5 +20,5 @@ CREATE TABLE IF NOT EXISTS Lab (
   completed BOOL, 
   mark INT,
   discipline_id INT,
-  FOREIGN KEY (discipline_id) REFERENCES Discipline(id)
+  FOREIGN KEY (discipline_id) REFERENCES Discipline(id) ON DELETE CASCADE
 );

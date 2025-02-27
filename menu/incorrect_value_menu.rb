@@ -13,6 +13,8 @@ module Menu
           ShowMenu.perform
         when 3
           CreateMenu.perform
+        when 4
+          DeleteMenu.perform
         end
       end
     end
