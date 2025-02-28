@@ -14,6 +14,11 @@ module Queries
         ValueClasses::Discipline.new(id: row['id'].to_i, name: row['name'], semester_id: row['semester_id'])
       end
 
+      def show_labs_for_discipline(discipline_id:)
+        result = perform_query(query: 'SELECT name FROM lab WHERE discipline_id = $1', params: [discipline_id])
+        result.map { |row| puts(row['name']) }
+      end
+
       def get_labs_to_disciplines(discipline_id:)
         result = perform_query(
           query: 'SELECT * FROM lab WHERE discipline_id = $1', params: [discipline_id]
