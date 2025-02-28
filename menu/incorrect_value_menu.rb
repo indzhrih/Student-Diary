@@ -15,6 +15,8 @@ module Menu
           CreateMenu.perform
         when 4
           DeleteMenu.perform
+        when 5
+          CSVExportMenu.perform
         end
       end
     end

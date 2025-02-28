@@ -19,7 +19,8 @@ module Menu
            "1.Просмотреть Семестры/Дисциплины/Лабораторные\n"\
            "2.Создать Семестры/Дисциплины/Лабораторные\n"\
            "3.Удалить Семестры/Дисциплины/Лабораторные\n"\
-           "4.Выход\n"\
+           "4.Эксопртировать Семестры/Дисциплины/Лабораторные в csv\n"\
+           "5.Выход\n"\
     end
 
     def start_menu
@@ -36,6 +37,9 @@ module Menu
           Menu.delete
           break
         when 4
+          Menu.csv_export
+          Menu.exit_application(message: 'Выходим...')
+        when 5
           Menu.exit_application(message: 'Выходим...')
         else
           Menu.warning(message: 'Пожалуйста введите корректное значение', choice: 1)
