@@ -34,7 +34,7 @@ module Menu
           Menu.create
           break
         when 3
-          Menu.delete(message: 'Вы выбрали Удаление, но эта функция еще не была добавлена')
+          Menu.delete
           break
         when 4
           Menu.csv_export
