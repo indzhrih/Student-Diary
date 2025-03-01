@@ -38,7 +38,7 @@ module Menu
           break
         when 4
           Menu.csv_export
-          Menu.exit_application(message: 'Выходим...')
+          break
         when 5
           Menu.exit_application(message: 'Выходим...')
         else
