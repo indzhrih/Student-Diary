@@ -15,6 +15,12 @@ module Queries
                                    end_date: row['end_date'], active: row['active'])
       end
 
+      def get_sem_data
+        result = perform_query(query: 'SELECT * FROM semester')        
+        result.map { |row|  ValueClasses::Semester.new(id: row['id'].to_i, name: row['name'], start_date: row['start_date'],
+                                                       end_date: row['end_date'], active: row['active'])}
+      end
+
       def show_added_sems
         result = perform_query(query: 'SELECT name FROM semester')
         result.map { |row| puts(row['name']) }
