@@ -1,4 +1,5 @@
 require_relative 'base_menu'
+require_relative '../decorators/analyze_decorator'
 require_relative '../queries/semester_query'
 require_relative '../value_classes/semester'
 
@@ -13,19 +14,33 @@ module Menu
       private
 
       def variants
-        puts "Введите название семестра, который хотите отобразить или 0 если хотите вернуться назад \n"\
-             "Добавленные семестры:\n"
-        Queries::SemesterQuery.show_added_sems
+        puts "Введите, что вы хотите вывести:\n"\
+             "1.Вывести определенный семестр\n"\
+             "2.Активные семестры\n"\
+             "3.Семестры, в которых есть определенная дисциплина\n"\
+             "4.Вывести семестры, в порядке приближения окончания\n"\
+             "5.Вывести семестры, с отсортированными дисциплинами, по среднему баллу\n"\
+             '6.Назад'
       end
 
       def choice_menu
-        @choice = gets.chomp
-        chosen_sem = Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: @choice)
+        loop do
+          @choice = gets.to_i
+          case @choice
+          when 1..5
+            data = Decorators::AnalyzeDecorator.analyze_data_by_type(sort_type: @choice)
 
-        return show_sem(sem: chosen_sem) if chosen_sem.nil? == false
-        return Menu.start if @choice.chomp == '0'
+            return Menu.warning(message: 'По вашим данным ничего не найдено!', choice: 2) if data.nil? || data.empty?
 
-        Menu.warning(message: "Указанный семестр не найден!\nПожалуйста введите корректное значение", choice: 2)
+            data.each { |sem| show_sem(sem: sem) }
+            perform
+            break
+          when 6
+            Menu.start
+          else
+            Menu.warning(message: 'Пожалуйста введите корректное значение', choice: 2)
+          end
+        end
       end
 
       def show_sem(sem:)
@@ -38,8 +53,6 @@ module Menu
              "- Статус: #{info[:active]}\n"\
              "--------------------------\n"\
              "#{disciplines_info}"
-
-        perform
       end
 
       def show_discipline(discipline:)
