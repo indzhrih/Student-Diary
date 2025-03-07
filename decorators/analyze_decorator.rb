@@ -33,11 +33,11 @@ module Decorators
       end
 
       def select_active_semesters
-        Queries::SemesterQuery.get_sem_data.select { |sem| sem.active }
+        Queries::SemesterQuery.get_sem_data.select { |sem| sem.get_json_info[:active] == 'Активен' }
       end
 
       def select_semesters_by_discipline
-        name = Menu::BaseMenu.get_name
+        name = Menu::BaseMenu.get_name(message: 'Введите название дисциплины')
         query = <<-SQL
           SELECT
             s.id AS semester_id,
