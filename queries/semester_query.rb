@@ -10,17 +10,12 @@ module Queries
 
         return nil if result.num_tuples.zero?
 
-        row = result.first
-        ValueClasses::Semester.new(id: row['id'].to_i, name: row['name'], start_date: row['start_date'],
-                                   end_date: row['end_date'], active: row['active'])
+        translate_row(row: result.first, table_type: :semester)
       end
 
       def get_sem_data
         result = perform_query(query: 'SELECT * FROM semester')
-        result.map do |row|
-          ValueClasses::Semester.new(id: row['id'].to_i, name: row['name'], start_date: row['start_date'],
-                                     end_date: row['end_date'], active: row['active'])
-        end
+        result.map { |row| translate_row(row: row, table_type: :semester) }
       end
 
       def show_added_sems
@@ -40,10 +35,7 @@ module Queries
 
         return [] if result.num_tuples.zero?
 
-        result.map do |row|
-          ValueClasses::Discipline.new(id: row['id'].to_i, name: row['name'],
-                                       semester_id: row['semester_id'])
-        end
+        result.map { |row| translate_row(row: row, table_type: :discipline) }
       end
 
       def is_name_unique(name:)

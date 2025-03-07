@@ -1,4 +1,5 @@
 require_relative 'base_menu'
+require_relative 'incorrect_value_menu'
 require_relative '../queries/semester_query'
 require_relative '../queries/discipline_query'
 require_relative '../queries/lab_query'
@@ -44,11 +45,6 @@ module Menu
              '4.Назад'
       end
 
-      def get_variants_string(table_name:)
-        "Введите название из таблицы #{table_name}, или 0 если хотите вернуться назад\n"\
-               "Добавленные объекты из #{table_name}:\n"
-      end
-
       def show_sem_variants
         puts get_variants_string(table_name: 'Семестр')
 
@@ -72,13 +68,6 @@ module Menu
         perform
       end
 
-      def get_name
-        @choice = gets.chomp
-        return Menu.start if @choice.chomp == '0'
-
-        @choice
-      end
-
       def choice_object(object_type:)
         case object_type
         when :semester
@@ -93,21 +82,24 @@ module Menu
       def semester_choice
         show_sem_variants
 
-        Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: get_name)
+        sem = Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: get_name)
+        object_check(object: sem, choice: 4)
       end
 
       def discipline_choice
         sem_id = choice_object(object_type: :semester).get_json_info[:id]
         show_discipline_variants(id: sem_id)
 
-        Queries::DisciplineQuery.find_discipline_by_name_and_sem_id(discipline: get_name, sem_id: sem_id)
+        discipline = Queries::DisciplineQuery.find_discipline_by_name_and_sem_id(discipline: get_name, sem_id: sem_id)
+        object_check(object: discipline, choice: 4)
       end
 
       def lab_choice
         discipline_id = choice_object(object_type: :discipline).get_json_info[:id]
         show_lab_variants(id: discipline_id)
 
-        Queries::LabQuery.find_lab_by_name_and_discipline_id(lab: get_name, discipline_id: discipline_id)
+        lab = Queries::LabQuery.find_lab_by_name_and_discipline_id(lab: get_name, discipline_id: discipline_id)
+        object_check(object: lab, choice: 4)
       end
     end
   end

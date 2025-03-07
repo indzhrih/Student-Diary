@@ -9,9 +9,7 @@ module Queries
                                params: [lab, discipline_id])
         return nil if result.num_tuples.zero?
 
-        row = result.first
-        ValueClasses::Lab.new(id: row['id'].to_i, name: row['name'], deadline: row['deadline'],
-                              completed: row['completed'], mark: ['mark'], discipline_id: row['discipline_id'])
+        translate_row(row: result.first, table_type: :lab)
       end
 
       def add_to_d_b(lab:)

@@ -16,7 +16,7 @@ module ValueClasses
         id: @id,
         name: @name,
         deadline: @deadline,
-        completed: @completed ? 'Выполнено' : 'Не Выполнено',
+        completed: @completed == 't' ? 'Выполнено' : 'Не Выполнено',
         mark: @mark,
         discipline_id: @discipline_id
       }

@@ -20,7 +20,7 @@ module ValueClasses
         name: @name,
         start_date: @start_date,
         end_date: @end_date,
-        active: @active ? 'Активен' : 'Не активен',
+        active: @active == 't' ? 'Активен' : 'Не активен',
         disciplines: Queries::SemesterQuery.get_disciplines_to_sem(sem_id: @id)
       }
     end
