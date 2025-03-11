@@ -22,34 +22,15 @@ module Menu
       end
 
       def show_sem_variants
-        puts "Введите название семестра, в который хотите добавить новую дисциплину или 0 если хотите вернуться назад\n"\
-             "Добавленные семестры:\n"
+        puts get_variants_string(table_name: 'Семестр')
+
         Queries::SemesterQuery.show_added_sems
       end
 
       def show_discipline_variants(sem_id:)
-        puts "Введите название дисциплины, в который хотите добавить новую лабу или 0 если хотите вернуться назад\n"\
-             "Добавленные дисциплины:\n"
+        puts get_variants_string(table_name: 'Дисциплина')
+
         Queries::SemesterQuery.show_disciplines_for_sem(sem_id: sem_id)
-      end
-
-      def create_semester
-        Forms::SemesterForm.create_semester
-        perform
-      end
-
-      def create_discipline
-        show_sem_variants
-        choice_sem_menu(creation_choice: 1)
-        perform
-      end
-
-      def create_lab
-        show_sem_variants
-        sem_id = choice_sem_menu(creation_choice: 2)
-        show_discipline_variants(sem_id: sem_id)
-        choice_discipline_menu(sem_id: sem_id)
-        perform
       end
 
       def choice_menu
@@ -57,13 +38,13 @@ module Menu
           @choice = gets.to_i
           case @choice
           when 1
-            create_semester
+            create_object(object_type: :semester)
             break
           when 2
-            create_discipline
+            create_object(object_type: :discipline)
             break
           when 3
-            create_lab
+            create_object(object_type: :lab)
             break
           when 4
             puts 'Назад...'
@@ -74,30 +55,34 @@ module Menu
         end
       end
 
-      def choice_sem_menu(creation_choice:)
-        @choice = gets.chomp
-        chosen_sem = Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: @choice)
-
-        if chosen_sem.nil? == false && creation_choice == 1
-          return Forms::DisciplineForm.create_discipline(sem_id: chosen_sem.get_json_info[:id])
+      def create_object(object_type:)
+        case object_type
+        when :semester
+          Forms::SemesterForm.create_semester
+          perform
+        when :discipline
+          Forms::DisciplineForm.create_discipline(sem_id: semester_choice.get_json_info[:id])
+          perform
+        when :lab
+          Forms::LabForm.create_lab(discipline_id: discipline_choice.get_json_info[:id])
+          perform
         end
-        return chosen_sem.get_json_info[:id] if chosen_sem.nil? == false && creation_choice == 2
-        return Menu.start if @choice.chomp == '0'
-
-        Menu.warning(message: "Указанный семестр не найден!\nПожалуйста введите корректное значение", choice: 3)
       end
 
-      def choice_discipline_menu(sem_id:)
-        @choice = gets.chomp
-        chosen_discipline = Queries::DisciplineQuery.find_discipline_by_name_and_sem_id(discipline: @choice,
-                                                                                        sem_id: sem_id)
+      def semester_choice
+        show_sem_variants
 
-        if chosen_discipline.nil? == false
-          return Forms::LabForm.create_lab(discipline_id: chosen_discipline.get_json_info[:id])
-        end
-        return Menu.start if @choice.chomp == '0'
+        object_check(object: Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: get_name), choice: 3)
+      end
 
-        Menu.warning(message: "Указанная дисциплина не найдена!\nПожалуйста введите корректное значение", choice: 3)
+      def discipline_choice
+        sem_id = semester_choice.get_json_info[:id]
+        show_discipline_variants(sem_id: sem_id)
+
+        object_check(
+          object: Queries::DisciplineQuery.find_discipline_by_name_and_sem_id(discipline: get_name,
+                                                                              sem_id: sem_id), choice: 3
+        )
       end
     end
   end

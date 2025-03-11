@@ -10,8 +10,7 @@ module Queries
 
         return nil if result.num_tuples.zero?
 
-        row = result.first
-        ValueClasses::Discipline.new(id: row['id'].to_i, name: row['name'], semester_id: row['semester_id'])
+        convert_row_to_object(row: result.first, table_type: :discipline)
       end
 
       def show_labs_for_discipline(discipline_id:)
@@ -25,10 +24,7 @@ module Queries
         )
         return [] if result.num_tuples.zero?
 
-        result.map do |row|
-          ValueClasses::Lab.new(id: row['id'].to_i, name: row['name'], deadline: row['deadline'], completed: row['completed'], mark: row['mark'],
-                                discipline_id: row['discipline_id'])
-        end
+        result.map { |row| convert_row_to_object(row: row, table_type: :lab) }
       end
 
       def add_to_d_b(sem_id:, name:)
