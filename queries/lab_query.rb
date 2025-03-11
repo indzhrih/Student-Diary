@@ -9,7 +9,7 @@ module Queries
                                params: [lab, discipline_id])
         return nil if result.num_tuples.zero?
 
-        translate_row(row: result.first, table_type: :lab)
+        convert_row_to_object(row: result.first, table_type: :lab)
       end
 
       def add_to_d_b(lab:)

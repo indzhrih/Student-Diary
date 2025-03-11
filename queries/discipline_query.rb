@@ -10,7 +10,7 @@ module Queries
 
         return nil if result.num_tuples.zero?
 
-        translate_row(row: result.first, table_type: :discipline)
+        convert_row_to_object(row: result.first, table_type: :discipline)
       end
 
       def show_labs_for_discipline(discipline_id:)
@@ -24,7 +24,7 @@ module Queries
         )
         return [] if result.num_tuples.zero?
 
-        result.map { |row| translate_row(row: row, table_type: :lab) }
+        result.map { |row| convert_row_to_object(row: row, table_type: :lab) }
       end
 
       def add_to_d_b(sem_id:, name:)

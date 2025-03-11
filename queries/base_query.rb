@@ -19,7 +19,7 @@ module Queries
 
       private 
       
-      def translate_row(row:, table_type:)
+      def convert_row_to_object(row:, table_type:)
         case table_type
         when :semester
           ValueClasses::Semester.new(id: row['id'].to_i, name: row['name'], start_date: row['start_date'],

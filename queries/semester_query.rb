@@ -10,12 +10,12 @@ module Queries
 
         return nil if result.num_tuples.zero?
 
-        translate_row(row: result.first, table_type: :semester)
+        convert_row_to_object(row: result.first, table_type: :semester)
       end
 
       def get_sem_data
         result = perform_query(query: 'SELECT * FROM semester')
-        result.map { |row| translate_row(row: row, table_type: :semester) }
+        result.map { |row| convert_row_to_object(row: row, table_type: :semester) }
       end
 
       def show_added_sems
@@ -35,7 +35,7 @@ module Queries
 
         return [] if result.num_tuples.zero?
 
-        result.map { |row| translate_row(row: row, table_type: :discipline) }
+        result.map { |row| convert_row_to_object(row: row, table_type: :discipline) }
       end
 
       def is_name_unique(name:)
