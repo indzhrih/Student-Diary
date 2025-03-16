@@ -27,14 +27,13 @@ module Forms
 
       def validate_name
         name = gets.chomp
-        while Queries::SemesterQuery.is_name_unique(name: name) == false
-          puts 'Такое имя уже есть!'
+        until !name.empty? && Queries::SemesterQuery.is_name_unique(name: name)
+          puts name.empty? ? 'Имя не может быть пустым!' : 'Такое имя уже есть!'
           name = gets.chomp
         end
-
         name
       end
-
+      
       def validate_date
         loop do
           date = gets.chomp

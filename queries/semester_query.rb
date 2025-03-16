@@ -39,11 +39,7 @@ module Queries
       end
 
       def is_name_unique(name:)
-        result = perform_query(query: 'SELECT name FROM semester WHERE name = $1', params: [name])
-
-        return true if result.num_tuples.zero?
-
-        false
+        perform_query(query: 'SELECT name FROM semester WHERE name = $1', params: [name]).num_tuples.zero?
       end
 
       def add_to_d_b(sem:)
