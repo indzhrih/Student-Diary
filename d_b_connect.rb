@@ -6,13 +6,14 @@ class DatabaseConnect
   attr_accessor :connection
 
   def initialize(host: ENV['DB_HOST'], port: ENV['DB_PORT'].to_i, dbname: ENV['DB_NAME'], user: ENV['DB_USER'],
-                 password: ENV['DB_PASSWORD'])
+                 password: ENV['DB_PASSWORD'], client_encoding: ENV['DB_ENCODING'])
     @connection = PG.connect(
       host: host,
       port: port,
       dbname: dbname,
       user: user,
-      password: password
+      password: password,
+      client_encoding: client_encoding
     )
   end
 
@@ -33,7 +34,7 @@ class DatabaseConnect
     puts "Ошибка при создании/проверке базы данных: #{e.message}"
   end
 
-  def fill_database(sql_file: 'db_initialization.sql')
+  def fill_database(sql_file: 'd_b_initialization.sql')
     @connection.exec(File.read(sql_file))
   rescue PG::Error => e
     puts "Ошибка при выполнении SQL: #{e.message}"

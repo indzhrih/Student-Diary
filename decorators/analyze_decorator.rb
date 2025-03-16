@@ -26,7 +26,7 @@ module Decorators
       private
 
       def select_sem_by_name
-        puts 'Добавленные семестры'
+        puts 'Добавленные семестры(введите 0, если хотите вернуться назад)'
         Queries::SemesterQuery.show_added_sems
 
         [*Queries::SemesterQuery.find_sem_by_name_or_id(sem_name: Menu::BaseMenu.get_name)]
@@ -37,7 +37,7 @@ module Decorators
       end
 
       def select_semesters_by_discipline
-        name = Menu::BaseMenu.get_name(message: 'Введите название дисциплины')
+        name = Menu::BaseMenu.get_name(message: 'Введите название дисциплины(введите 0, если хотите вернуться назад)')
         query = <<-SQL
           SELECT
             s.id AS semester_id,
