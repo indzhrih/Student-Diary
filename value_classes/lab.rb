@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ValueClasses
   class Lab
     attr_accessor :name, :deadline, :completed, :mark

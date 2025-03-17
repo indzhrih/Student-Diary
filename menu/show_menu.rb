@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'base_menu'
 require_relative '../decorators/analyze_decorator'
 require_relative '../queries/semester_query'
@@ -84,7 +86,7 @@ module Menu
       end
 
       def show_status_info(lab:, info:)
-        return "Оценка: #{info[:mark]}" if info[:completed] == 'Выполнено'
+        return "Оценка: #{info[:mark].to_i}" if info[:completed] == 'Выполнено'
 
         "Дедлайн: #{info[:deadline]}"
       end

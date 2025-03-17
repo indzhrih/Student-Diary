@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require_relative 'd_b_connect'
 require_relative 'menu/main_menu'

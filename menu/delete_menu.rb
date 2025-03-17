@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'base_menu'
 require_relative 'incorrect_value_menu'
 require_relative '../queries/semester_query'

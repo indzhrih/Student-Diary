@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'date'
 require_relative '../queries/lab_query'
 require_relative '../value_classes/discipline'
@@ -14,7 +16,7 @@ module Forms
 
       def get_info(discipline_id:)
         puts 'Введите название Лабараторной'
-        name = gets.chomp
+        name = validate_name
         puts 'Введите дедлайн формата ДД-ММ-ГГГГ'
         deadline = validate_deadline
         puts 'Введите статус(Выполнено или Не выполнено)'
@@ -22,7 +24,16 @@ module Forms
         puts 'Введите оценку'
         mark = validate_mark
 
-        [name, deadline, status, mark, discipline_id]
+        [name, deadline, mark.to_i, status, discipline_id]
+      end
+
+      def validate_name
+        name = gets.chomp
+        while name.empty?
+          puts 'Имя не может быть пустым!'
+          name = gets.chomp
+        end
+        name
       end
 
       def validate_deadline
@@ -49,7 +60,7 @@ module Forms
 
       def validate_mark
         mark = gets.chomp
-        while mark.to_i <= 0 && mark.to_i >= 10
+        while mark.to_i < 0 || mark.to_i > 10
           puts 'Неверный формат оценки, оценка должна быть от 0 до 10'
           mark = gets.chomp
         end
