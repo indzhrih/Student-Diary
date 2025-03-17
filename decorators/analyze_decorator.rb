@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../queries/semester_query'
 require_relative '../queries/base_query'
 require_relative '../value_classes/semester'

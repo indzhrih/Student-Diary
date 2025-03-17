@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../d_b_connect'
 require 'pg'
 
@@ -17,8 +19,8 @@ module Queries
         connection.close
       end
 
-      private 
-      
+      private
+
       def convert_row_to_object(row:, table_type:)
         case table_type
         when :semester
@@ -29,7 +31,7 @@ module Queries
                                        semester_id: row['semester_id'])
         when :lab
           ValueClasses::Lab.new(id: row['id'].to_i, name: row['name'], deadline: row['deadline'],
-                                completed: row['completed'], mark: ['mark'], discipline_id: row['discipline_id'])
+                                completed: row['completed'], mark: row['mark'].to_i, discipline_id: row['discipline_id'])
         end
       end
     end

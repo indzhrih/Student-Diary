@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'discipline'
 require_relative '../queries/semester_query'
 require_relative '../d_b_connect'

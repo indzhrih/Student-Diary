@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'dialog'
 require_relative 'csv_export_menu'
 

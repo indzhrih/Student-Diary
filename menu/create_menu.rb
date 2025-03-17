@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'base_menu'
 require_relative '../forms/semester_form'
 require_relative '../forms/discipline_form'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'date'
 require_relative '../queries/semester_query'
 require_relative '../value_classes/semester'
@@ -33,7 +35,7 @@ module Forms
         end
         name
       end
-      
+
       def validate_date
         loop do
           date = gets.chomp
